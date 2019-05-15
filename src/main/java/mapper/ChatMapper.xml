@@ -1,0 +1,18 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.ChatMapper">
+
+    <insert id="record" parameterType="ChatMessage">
+      insert into c_history(`nickname`,`date`,`record`) value(#{nickname},#{date},#{message})
+    </insert>
+
+    <select id="getRecordCount" resultType="java.lang.Integer">
+      select count(1) from c_history
+    </select>
+
+    <select id="getRecords" parameterType="java.lang.Integer" resultType="ChatMessage">
+        select `nickname`,`date`,`record` as message from c_history order by `index` desc limit #{param1}, #{param2}
+    </select>
+
+</mapper>
