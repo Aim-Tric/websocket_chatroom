@@ -1,12 +1,11 @@
-package mapper;
+package service;
 
-import pojo.HobbyTag;
 import pojo.Message;
 import pojo.Topic;
 
 import java.util.List;
 
-public interface ChatMapper {
+public interface ChatRoomSystemService {
 
     List<Integer> getRoomMembersId(Integer roomNumber);
 
@@ -19,6 +18,8 @@ public interface ChatMapper {
     int insertRequest(Message message);
 
     Integer getRoomId(Integer fId, Integer sId);
+
+    List<Topic> getTopicByHobby(Integer[] hobbyId);
 
     int handleRequest(Message message);
 

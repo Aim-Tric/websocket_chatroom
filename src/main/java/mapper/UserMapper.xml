@@ -2,15 +2,62 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="mapper.UserMapper">
-    <select id="login" resultType="User">
-        select u.`id`,u.`username`,u.`password`,u.`nickname`,u.`realname`,d.`value` as role
-        from c_user u, c_dict d
-        where u.role_id = d.id and username = #{param1}
+
+    <sql id="Base_Column_List">
+      cu.`id`,cu.`phone`,cu.`password`,cu.`nickname`
+    </sql>
+
+    <select id="getByRecord" parameterType="pojo.qo.UserQO" resultType="pojo.qo.UserQO">
+        select
+        <include refid="Base_Column_List"/>
+        from c_user cu
+        where cu.`phone` = #{phone}
     </select>
 
-    <insert id="register" parameterType="User">
-        insert into c_user(`username`,`password`,`nickname`,`realname`,`role_id`)
-        value(#{username},#{password},#{nickname},#{realname},2)
+    <insert id="insertUser" parameterType="pojo.bo.UserBO">
+        insert into c_user(`phone`,`password`,`nickname`)
+        value(#{phone},#{password},#{nickname})
     </insert>
+
+    <select id="getUserById" resultType="pojo.vo.UserVO">
+        select cu.`id`, cu.`nickname`
+        from c_user cu
+        where cu.`id` = #{param1}
+    </select>
+
+    <select id="getFriendList" parameterType="java.lang.Integer" resultType="pojo.vo.UserVO">
+      select cuf.`friend_id` id, cu.`nickname`, cu.`signature`
+      from c_user cu,c_user_friends cuf
+      where cu.`id` = cuf.`friend_id` and cuf.`user_id` = #{param1}
+    </select>
+
+    <update id="updateUser" parameterType="pojo.bo.UserBO">
+        update c_user
+        <set>
+            <if test="pic != null">
+                `pic` = #{picByte},
+            </if>
+            <if test="password != null">
+                `password` = #{password},
+            </if>
+            <if test="signature != null">
+                `nickname` = #{nickname},
+            </if>
+            <if test="signature != null">
+                `signature` = #{signature},
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <insert id="insertFriend">
+        insert into c_user_friend(`user_id`,`friend_id`)
+        values(#{param1},#{param2}),(#{param2},#{param1})
+    </insert>
+
+    <select id="searchUserByNickname" parameterType="pojo.qo.UserQO" resultType="pojo.bo.UserBO">
+        select `id`, `nickname`, `pic`, `signature`
+        from c_user where `nickname` like "%"#{nickname}"%"
+    </select>
 
 </mapper>

@@ -17,22 +17,24 @@
 
     <context:property-placeholder location="classpath:jdbc.properties"/>
 
+
     <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
         <property name="driverClass" value="${jdbc.driver}"/>
         <property name="jdbcUrl" value="${jdbc.url}"/>
-        <property name="user" value="${jdbc.username}"/>
+        <property name="user" value="${jdbc.phone}"/>
         <property name="password" value="${jdbc.password}"/>
     </bean>
 
     <bean class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="configLocation" value="classpath:sqlMapConfig.xml"/>
         <property name="dataSource" ref="dataSource"/>
-        <property name="typeAliasesPackage" value="pojo"/>
+        <property name="typeAliasesPackage" value="pojo,pojo.qo,pojo.vo"/>
     </bean>
 
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="basePackage" value="mapper"/>
     </bean>
+
 
 
 </beans>

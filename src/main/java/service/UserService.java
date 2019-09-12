@@ -1,12 +1,26 @@
 package service;
 
+import pojo.qo.UserQO;
+import pojo.vo.UserVO;
 
-import pojo.User;
+import java.util.List;
 
 public interface UserService {
 
-    User login(String username, String password);
+    UserQO getUserByRecord(UserQO user);
 
-    void register(User user);
+    int register(UserQO user);
+
+    List<UserVO> getFriendList(Integer id);
+
+    UserVO getUserById(Integer id);
+
+    boolean checkPhone(UserQO userQO);
+
+    int updateUser(UserQO userQO);
+
+    int addFriend(Integer userId, Integer friendId);
+
+    List<UserVO> searchUserByNickname(UserQO userQO);
 
 }

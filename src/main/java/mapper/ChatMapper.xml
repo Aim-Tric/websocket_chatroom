@@ -3,16 +3,48 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="mapper.ChatMapper">
 
-    <insert id="record" parameterType="ChatMessage">
-      insert into c_history(`nickname`,`date`,`record`) value(#{nickname},#{date},#{message})
-    </insert>
-
-    <select id="getRecordCount" resultType="java.lang.Integer">
-      select count(1) from c_history
+    <select id="getRoomMembersId" parameterType="java.lang.Integer">
+        select user_id from c_room_user
+        where room_id = #{param1}
     </select>
 
-    <select id="getRecords" parameterType="java.lang.Integer" resultType="ChatMessage">
-        select `nickname`,`date`,`record` as message from c_history order by `index` desc limit #{param1}, #{param2}
+    <insert id="insertRecord" parameterType="pojo.Message">
+        insert into c_record (`room_id`, `user_id`, `type`, `send_time`, `group`, `body`)
+        value(#{target}, #{source}, #{type}, #{createTime}, #{group}, #{body})
+    </insert>
+
+    <insert id="insertRequest" parameterType="pojo.Message">
+        insert into c_request(`target_id`, `source_id`, `send_time`, `content`, `is_handle`)
+        value(#{target}, #{source}, #{createTime}, #{body}, #{handle})
+    </insert>
+
+    <select id="getRoomId" resultType="java.lang.Integer">
+        select `id` from c_one_to_one
+        where user_f = #{param1} and user_s = #{param2}
+        or user_f = #{param2} and user_s = #{param1}
+    </select>
+
+    <update id="handleRequest" parameterType="pojo.Message">
+      update c_request
+      set `is_hadle` = 1
+      and `result` = #{result}
+      where `id` = #{id}
+    </update>
+
+    <select id="getRequest" parameterType="pojo.Message" resultType="pojo.Message">
+        select `source_id` source,`target_id` target,
+        `send_time` createTime,`content` body,`is_handle` handle,
+        `result`
+        from c_request
+        where `target_id` = #{target} and `source_id` = #{source}
+    </select>
+
+    <select id="getRequestByUserId" parameterType="pojo.Message" resultType="pojo.Message">
+        select `source_id` source,`target_id` target,
+        `send_time` createTime,`content` body,`is_handle` handle,
+        `result`
+        from c_request
+        where `target_id` = #{param1}
     </select>
 
 </mapper>

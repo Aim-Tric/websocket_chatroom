@@ -8,19 +8,23 @@ import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 
-
+/**
+ * WebSocket 配置类
+ */
 @Configuration
 @EnableWebMvc
 @EnableWebSocket
 public class WebSocketConfig implements WebSocketConfigurer {
 
     @Autowired
-    SocketHandler handler;
+    ChatWebSocketHandler handler;
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry.addHandler(handler, "/chat")
+                .setAllowedOrigins("*")
                 .addInterceptors(new HandshakeInterceptor());
+        registry.addHandler(handler, "/chat/sockjs").withSockJS();
     }
 
 }

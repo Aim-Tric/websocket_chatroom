@@ -1,2 +1,11 @@
-# websocket_chatroom
-SSM + Websocket chatroom for learning
+# WebSocket Chatroom
+
+> 本项目整合SSM+WebSocket开发，完成了好友添加、文本信息聊天、用户匹配聊天请求推送功能。
+
+## 聊天室功能模块
+
+- 好友模块
+- 匹配聊天模块
+- 单聊模块
+- 主题聊天模块
+
